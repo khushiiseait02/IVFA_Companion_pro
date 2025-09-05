@@ -1,0 +1,9 @@
+Flask
+Flask-PyMongo
+Werkzeug
+reportlab
+matplotlib
+flask 
+flask-pymongo 
+reportlab
+

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IVF Companion Chatbot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .chatbox {
+            max-width: 600px;
+            margin: 2rem auto;
+            background-color: #fefefe;
+            border: 1px solid #e5e7eb;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+        }
+
+        .chatlog {
+            height: 300px;
+            overflow-y: auto;
+            background: #f9fafb;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.95rem;
+        }
+
+        #userInput {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+
+        .bot-msg {
+            color: #374151;
+        }
+
+        .user-msg {
+            font-weight: bold;
+            color: #4b5563;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-pink-50 to-purple-100 min-h-screen font-sans">
+
+    <div class="chatbox">
+        <h2 class="text-2xl font-bold text-center text-purple-700 mb-4">💬 IVF Companion Chatbot</h2>
+        <div class="chatlog" id="chatlog"></div>
+        <input type="text" id="userInput" placeholder="Ask me anything..." onkeypress="handleKey(event)">
+    </div>
+
+    <!-- Chatbot Script -->
+    <script>
+        function handleKey(event) {
+            if (event.key === "Enter") {
+                let input = document.getElementById("userInput").value.trim();
+                if (!input) return;
+
+                document.getElementById("chatlog").innerHTML += "<div class='user-msg mb-1'>You: " + input + "</div>";
+
+                fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: input })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("chatlog").innerHTML += "<div class='bot-msg mb-3'>Bot: " + data.response + "</div>";
+                    document.getElementById("userInput").value = "";
+                    document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight;
+                });
+            }
+        }
+    </script>
+
+</body>
+</html>
